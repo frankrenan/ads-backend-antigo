@@ -1,37 +1,59 @@
 import { getCustomRepository } from "typeorm";
-import { ServidorRepository } from "../repository/ServidorRepository";
+import { UsuarioRepository } from "../repository/UsuarioRepository";
+import { hash, compare } from "bcryptjs";
+import { sign } from "jsonwebtoken";
 
 
-interface IServidorRequest {
+interface IUsuarioRequest {
   id_perfil: string;
-  id_conta: string;
-  cpf_conta: string;
+  cpf: string;
+  senha: string;
+  admin?: boolean;
   nome: string;
   matricula: string;
 }
 
-class ServidorService {
+class UsuarioService {
 
-  async create({ id_perfil, id_conta, cpf_conta, nome, matricula }: IServidorRequest) {
+  async create({ id_perfil, cpf, senha, admin = false, nome, matricula }: IUsuarioRequest) {
 
-    const servidorRepository = getCustomRepository(ServidorRepository);
+    const usuarioRepository = getCustomRepository(UsuarioRepository);
 
-    if (await servidorRepository.findOne({ cpf_conta })) throw new Error('Este CPF já existe na base de dados!');
-    if (await servidorRepository.findOne({ matricula })) throw new Error('Esta matricula já existe na base de dados!');
+    if (await usuarioRepository.findOne({ cpf })) throw new Error('Este CPF já existe na base de dados!');
+    if (await usuarioRepository.findOne({ matricula })) throw new Error('Esta matricula já existe na base de dados!');
 
-    const servidor = servidorRepository.create({ id_perfil, id_conta, cpf_conta, nome, matricula });
+    const hashSenha = await hash(senha, 8);
 
-    await servidorRepository.save(servidor);
+    const usuario = usuarioRepository.create({ id_perfil, cpf, senha: hashSenha, admin, nome, matricula });
 
-    return servidor;
+    await usuarioRepository.save(usuario);
+
+    return usuario;
   }
 
   async list() {
-    const servidorRepository = getCustomRepository(ServidorRepository);
+    const usuarioRepository = getCustomRepository(UsuarioRepository);
 
-    return await servidorRepository.find();
+    return await usuarioRepository.find();
+  }
+
+  async authenticate({ cpf, senha }: IUsuarioRequest) {
+
+    const usuarioRepository = getCustomRepository(UsuarioRepository);
+
+    const usuario = await usuarioRepository.findOne({ cpf });
+
+    if (!usuario) throw new Error('Usuário não existe!');
+    if (!await compare(senha, usuario.senha)) throw new Error('CPF ou senha incorreto!');
+
+    const token = sign({ id: usuario.id }, process.env.API_SECRET_KEY, {
+      subject: usuario.cpf,
+      expiresIn: 28800
+    })
+
+    return Object.assign({ usuario, token: token });
   }
 
 }
 
-export { ServidorService }
+export { UsuarioService }

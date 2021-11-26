@@ -1,11 +1,11 @@
 import {MigrationInterface, QueryRunner, Table} from "typeorm";
 
-export class Conta1636999806175 implements MigrationInterface {
+export class Permissoes1637939280376 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: "conta",
+                name: "permissoes",
                 columns: [
                     {
                         name: "id",
@@ -13,13 +13,8 @@ export class Conta1636999806175 implements MigrationInterface {
                         isPrimary: true
                     },
                     {
-                        name: "cpf",
-                        type: "varchar",
-                        isPrimary: true
-                    },
-                    {
-                        name: "senha",
-                        type: "varchar",
+                        name: "desc_permisssao",
+                        type: "enum('ADMINISTRADOR', 'PIRARUCU', 'BORRACHA', 'PIACAVA', 'DOACAO_ONEROSA', 'FEIRAS_E_EVENTOS','PREME_E_PAF', 'PROMOVE', 'JUTA_E_MALVA','PESCADO_SOLIDARIO')"
                     },
                     {
                         name: "created_at",
@@ -33,11 +28,11 @@ export class Conta1636999806175 implements MigrationInterface {
                     }
                 ]
             })
-        )
+        );
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable('conta');
+        await queryRunner.dropTable("permissoes");
     }
 
 }

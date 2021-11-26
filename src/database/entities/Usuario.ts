@@ -1,10 +1,9 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn,  UpdateDateColumn } from "typeorm";
-import { Conta } from "./Conta";
 import { Perfil } from "./Perfil";
 import { v4 as uuid } from "uuid";
 
-@Entity("servidor")
-class Servidor {
+@Entity("usuario")
+class Usuario {
 
   constructor() {
     if (!this.id) this.id = uuid();
@@ -13,26 +12,30 @@ class Servidor {
   @PrimaryColumn()
   readonly id: string;
 
-  @Column()
-  id_perfil: string;
+  // @Column()
+  // id_perfil: string;
 
-  @JoinColumn({ name: "id_perfil" })
-  @ManyToOne(() => Perfil)
-  perfil: Perfil;
-
-  @Column()
-  id_conta: string;
+  // @JoinColumn({ name: "id_perfil" })
+  // @ManyToOne(() => Perfil)
+  // perfil: Perfil;
 
   @Column()
-  cpf_conta: string;
+  cpf: string;
 
-  @JoinColumn({ name: "id_conta" })
-  @JoinColumn({ name: "cpf_conta" })
-  @ManyToOne(() => Conta)
-  conta: Conta;
+  @Column()
+  senha: string;
 
   @Column()
   nome: string;
+
+  @Column()
+  administrador: boolean;
+
+  @Column()
+  email: string;
+  
+  @Column()
+  ativo: boolean;
 
   @Column()
   matricula: string;
@@ -45,4 +48,4 @@ class Servidor {
 
 }
 
-export { Servidor }
+export { Usuario }
