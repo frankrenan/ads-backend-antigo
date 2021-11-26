@@ -1,0 +1,18 @@
+{
+  "type": "mysql",
+  "host": "localhost",
+  "port": 3306,
+  "database": "base_ads",
+  "username": "root",
+  "password": "ads",
+  "migrations": [
+    "src/database/migrations/*.ts"
+  ],
+  "entities": [
+    "src/database/entities/*.ts"
+  ],
+  "cli": {
+    "migrationsDir": "src/database/migrations",
+    "entitiesDir": "src/database/entities"
+  }
+}
