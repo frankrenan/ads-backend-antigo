@@ -5,17 +5,18 @@ import { sign } from "jsonwebtoken";
 
 
 interface IUsuarioRequest {
-  id_perfil: string;
   cpf: string;
   senha: string;
-  admin?: boolean;
+  administrador?: boolean;
   nome: string;
+  email: string;
+  ativo: boolean;
   matricula: string;
 }
 
 class UsuarioService {
 
-  async create({ id_perfil, cpf, senha, admin = false, nome, matricula }: IUsuarioRequest) {
+  async create({ cpf, senha, administrador = false, nome, email, ativo = true, matricula }: IUsuarioRequest) {
 
     const usuarioRepository = getCustomRepository(UsuarioRepository);
 
@@ -24,7 +25,7 @@ class UsuarioService {
 
     const hashSenha = await hash(senha, 8);
 
-    const usuario = usuarioRepository.create({ id_perfil, cpf, senha: hashSenha, admin, nome, matricula });
+    const usuario = usuarioRepository.create({ cpf, senha: hashSenha, administrador, nome, email, ativo, matricula });
 
     await usuarioRepository.save(usuario);
 
@@ -37,7 +38,7 @@ class UsuarioService {
     return await usuarioRepository.find();
   }
 
-  async authenticate({ cpf, senha }: IUsuarioRequest) {
+  async authenticate(cpf, senha) {
 
     const usuarioRepository = getCustomRepository(UsuarioRepository);
 

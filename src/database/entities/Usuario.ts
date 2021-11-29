@@ -1,8 +1,8 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn,  UpdateDateColumn } from "typeorm";
-import { Perfil } from "./Perfil";
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryColumn,  UpdateDateColumn } from "typeorm";
+import { Permissoes } from "./Permissoes";
 import { v4 as uuid } from "uuid";
 
-@Entity("usuario")
+@Entity("usuarios")
 class Usuario {
 
   constructor() {
@@ -12,12 +12,9 @@ class Usuario {
   @PrimaryColumn()
   readonly id: string;
 
-  // @Column()
-  // id_perfil: string;
-
-  // @JoinColumn({ name: "id_perfil" })
-  // @ManyToOne(() => Perfil)
-  // perfil: Perfil;
+  @ManyToMany( () => Permissoes)
+  @JoinTable()
+  permissoes: Permissoes[];
 
   @Column()
   cpf: string;

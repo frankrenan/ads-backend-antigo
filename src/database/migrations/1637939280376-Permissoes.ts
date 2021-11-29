@@ -13,7 +13,7 @@ export class Permissoes1637939280376 implements MigrationInterface {
                         isPrimary: true
                     },
                     {
-                        name: "desc_permisssao",
+                        name: "desc_permissao",
                         type: "enum('ADMINISTRADOR', 'PIRARUCU', 'BORRACHA', 'PIACAVA', 'DOACAO_ONEROSA', 'FEIRAS_E_EVENTOS','PREME_E_PAF', 'PROMOVE', 'JUTA_E_MALVA','PESCADO_SOLIDARIO')"
                     },
                     {

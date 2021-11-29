@@ -1,38 +1,31 @@
 import { Router } from "express";
-import { ContaController } from "./controller/ContaController";
-import { PerfilController } from "./controller/PerfilController";
-import { ServidorController } from "./controller/ServidorController";
-import { AdministradorController } from "./controller/AdministradorController";
+import { PermissoesController } from "./controller/PermissoesController";
+import { UsuarioController } from "./controller/UsuarioController";
+import { UsuarioPermissaoController } from "./controller/UsuarioPermissaoController";
 import { ContaMiddleware } from "./middleware/ContaMiddleware";
 
 /* MIDDLEWARES */
 const contaMiddleware = new ContaMiddleware();
 
 /* CONTROLLERS */
-const contaController = new ContaController();
-const perfilController = new PerfilController();
-const servidorController = new ServidorController();
-const administradorController = new AdministradorController();
-
+const permissoesController = new PermissoesController();
+const usuarioController = new UsuarioController();
+const usuarioPermissaoController = new UsuarioPermissaoController();
 
 const router = Router();
 
+/*ROTAS Permissoes */
+router.post('/api/v1/permissoes', permissoesController.post);
+router.get('/api/v1/permissoes', permissoesController.get);
 
-/*ROTAS CONTA */
-router.post('/api/v1/conta', contaMiddleware.verificarConta, contaController.post);
-router.get('/api/v1/conta', contaMiddleware.verificarConta, contaController.get);
-router.post('/api/v1/authenticate', contaController.authenticate);
+/*ROTAS USUARIO */
+router.post('/api/v1/usuario', contaMiddleware.verificarConta , usuarioController.post);
+router.get('/api/v1/usuario', usuarioController.get);
+router.post('/api/v1/authenticate', usuarioController.authenticate);
 
-/*ROTAS PERFIL */
-router.post('/api/v1/perfil', contaMiddleware.verificarConta, perfilController.post);
-router.get('/api/v1/perfil', contaMiddleware.verificarConta, perfilController.get);
+/*ROTAS USUARIOPERMISSAO */
+router.post('/api/v1/usuario_permissao', usuarioPermissaoController.post);
+router.get('/api/v1/usuario_permissao', usuarioPermissaoController.get);
 
-/*ROTAS SERVIDOR */
-router.post('/api/v1/servidor', contaMiddleware.verificarConta, servidorController.post);
-router.get('/api/v1/servidor', contaMiddleware.verificarConta, servidorController.get);
-
-/*ROTAS ADMINISTRADOR */
-router.post('/api/v1/administrador', contaMiddleware.verificarConta, administradorController.post);
-router.get('/api/v1/administrador', contaMiddleware.verificarConta, administradorController.get);
 
 export { router }
